@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +31,18 @@
         }
 
         html, body {
-            overflow-x: hidden; /* Taşma sorununu çözmek için eklendi */
+            overflow-x: hidden;
+        }
+
+        img, svg, iframe, video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        nav, .container, .hero-inner, .hero-content {
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         body {
@@ -59,9 +71,12 @@
         }
 
         header {
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 9999;
+            z-index: 99999;
+            width: 100%;
+            left: 0;
+            right: 0;
         }
 
         .header-content {
@@ -351,7 +366,7 @@
         }
 
         .features-section {
-            margin: 60px 0;
+            margin: 0 0 40px 0;
         }
 
         .section-title {
@@ -481,9 +496,16 @@
 
         .new-features-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 30px;
             margin-top: 40px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 8px;
+            overflow: visible;
         }
 
         .new-features-column {
@@ -491,6 +513,16 @@
             border-radius: 12px;
             padding: 25px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 100%;
+            box-sizing: border-box;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .new-features-list code,
+        .new-features-list li {
+            word-break: break-word;
+            overflow-wrap: anywhere;
         }
 
         .new-features-column h3 {
@@ -775,8 +807,14 @@
             }
             
             .footer-content {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -807,7 +845,6 @@
             transform: translateY(0);
         }
 
-        /* Mobilde yukarı çık butonu için iyileştirmeler */
         @media (max-width: 768px) {
             .go-top {
                 right: 15px;
@@ -1213,6 +1250,33 @@
                 }
             });
         });
+
+        (function manageHeaderHeight(){
+            const root = document.documentElement;
+            const header = document.querySelector('header');
+            const navToggle = document.querySelector('.nav-toggle');
+
+            function updateHeaderHeight(){
+                if (!header) return;
+                
+                const h = header.offsetHeight;
+                root.style.setProperty('--header-height', h + 'px');
+                
+                document.body.style.paddingTop = h + 'px';
+            }
+            window.addEventListener('load', updateHeaderHeight);
+            window.addEventListener('resize', updateHeaderHeight);
+
+            
+            
+            if (navToggle) {
+                navToggle.addEventListener('click', function(){
+                    setTimeout(updateHeaderHeight, 250);
+                });
+            }
+            
+            updateHeaderHeight();
+        })();
     </script>
 </body>
 </html>
